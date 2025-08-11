@@ -13,7 +13,12 @@ pip install -r requirements.txt
 ## Export deals (YTD, excluding closedwon/closedlost)
 
 ```bash
+# Option A: use environment
 export HUBSPOT_TOKEN='YOUR_PRIVATE_APP_TOKEN'
+
+# Option B: create a .env file (dotenv is loaded automatically)
+echo "HUBSPOT_TOKEN=YOUR_PRIVATE_APP_TOKEN" > .env
+
 python3 fetch_latest_deals.py --output latest_deals.csv    # all YTD
 # or limit results
 python3 fetch_latest_deals.py --limit 200 --output latest_deals.csv

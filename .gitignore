@@ -14,4 +14,9 @@ venv/
 # Data outputs (regenerate as needed)
 *.csv
 
+# Env files (never commit secrets)
+.env
+.env.*
+.env.local
+
 

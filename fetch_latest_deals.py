@@ -37,6 +37,12 @@ from dataclasses import dataclass
 from typing import Dict, List, Optional, Tuple
 from datetime import datetime, timezone
 
+try:
+    # Optional: load environment variables from .env and .env.local
+    from dotenv import load_dotenv
+except Exception:  # pragma: no cover
+    load_dotenv = None  # type: ignore
+
 import requests
 
 
@@ -339,6 +345,14 @@ def write_csv(path: str, header: List[str], rows: List[List[str]]) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Export YTD HubSpot deals (excluding closedwon/closedlost) to CSV")
+    # Load env files early so HUBSPOT_TOKEN from .env/.env.local is available
+    if load_dotenv is not None:
+        try:
+            load_dotenv()
+            # .env.local overrides .env if present
+            load_dotenv(".env.local", override=True)
+        except Exception:
+            pass
     parser.add_argument("--token", default=os.getenv("HUBSPOT_TOKEN"), help="HubSpot Private App token")
     parser.add_argument("--limit", type=int, default=0, help="Number of YTD deals to fetch (0 = all)")
     parser.add_argument(
