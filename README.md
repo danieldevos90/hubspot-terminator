@@ -42,3 +42,37 @@ python3 report_by_owner.py --input latest_deals.csv --output summary_by_owner.cs
 
 ## Reference
 - HubSpot CRM Deals API: https://developers.hubspot.com/docs/reference/api/crm/objects/deals
+
+## SharePoint (Microsoft Graph)
+
+This repo includes `sharepoint_read_files.py` to list or download files from SharePoint using Microsoft Graph with application permissions.
+
+Environment (in `.env.local` or via `--env`):
+- `AZURE_TENANT_ID`: Azure AD tenant ID
+- `AZURE_CLIENT_ID`: App registration (client) ID
+- `AZURE_CLIENT_SECRET`: Client secret for the app registration
+
+Your app must have admin-consented application permissions such as `Files.Read.All` or `Sites.Read.All`.
+
+Examples:
+
+```bash
+# List root of the Documents library on a site
+python3 sharepoint_read_files.py --env .env.local \
+  --site-host contoso.sharepoint.com --site-path /sites/Sales --list /
+
+# List a folder
+python3 sharepoint_read_files.py --env .env.local \
+  --site-host contoso.sharepoint.com --site-path /sites/Sales \
+  --list "/Shared Reports/2025"
+
+# Download a specific file
+python3 sharepoint_read_files.py --env .env.local \
+  --site-host contoso.sharepoint.com --site-path /sites/Sales \
+  --download "/Shared Reports/2025/summary.xlsx" --out ./summary.xlsx
+
+# Download a folder recursively
+python3 sharepoint_read_files.py --env .env.local \
+  --site-host contoso.sharepoint.com --site-path /sites/Sales \
+  --download-folder "/Shared Reports/2025" --out-dir ./downloads
+```
